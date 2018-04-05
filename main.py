@@ -13,6 +13,8 @@ import string
 import StringIO
 import urllib
 import webapp2
+import logging
+import time
 
 from google.appengine.api import urlfetch
 
@@ -22,8 +24,8 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 class Session():
-    USER=''
-    PASS=''
+    USER='*********'
+    PASS='*********'
 
     def __init__(self):
         self.cookie = ''
@@ -35,7 +37,7 @@ class Session():
 
     def fields(self):
         return ['Day',
-                'Real Time',
+                #'Real Time',
                 'Job Arrivals',
                 'Queue Jobs',
                 'Station 1 Queue',
@@ -54,7 +56,7 @@ class Session():
                 'Revenue 2',
                 'Revenue 3',
                 'Total Revenue',
-                'Rolling Revenue Avg >50d',
+                'Rolling Revenue Avg >15d',
                 'Total Completed Jobs',
                 'Inventory',
                 'Cash']
@@ -63,10 +65,14 @@ class Session():
       revenue = 0
       n = 0
       for r in self.data:
-          if r > 50:
+          if r >= 15:
               revenue += self.data[r]['Total Revenue']
               n += 1
-      return float(revenue) / n
+
+      if n > 0:
+      	return float(revenue) / n
+      else:
+      	return 0
 
     def Login(self):
         result = urlfetch.fetch(
@@ -74,7 +80,7 @@ class Session():
             payload=urllib.urlencode({
                 'id': self.USER,
                 'password': self.PASS,
-                'institution': 'feldman',
+                'institution': 'opscom',
             }),
             method=urlfetch.POST)
         self.cookie = result.headers.get('set-cookie')
@@ -103,6 +109,8 @@ class Session():
             for day, r in zip(data[0::2], data[1::2]):
                 try:
                     self.data.setdefault(int(day), {'Day': day})[t] = r
+                    logging.info(day)
+
                 except:
                     pass
 
@@ -140,15 +148,15 @@ class Session():
         n = 0
         s = 0
         for d in sorted(self.data):
-            if d > 50:
+            if d > 15:
                 n += 1
                 s += self.data[d]['Total Revenue']
-                self.data[d]['Rolling Revenue Avg >50d'] = round(s / float(n), 2)
+                self.data[d]['Rolling Revenue Avg >15d'] = round(s / float(n), 2)
 
     def ParseLeadTimes(self):
         self._ParseMulti('/Plotk?data=JOBT&x=all',
                          'Lead Times ')
-
+		
     def ParseStationUtilization(self, station):
         self._ParseSingle('/Plot1?data=S%dUTIL&plottech=html5' % station,
                           'Station %d Utilization' % station)
@@ -160,11 +168,12 @@ class Session():
     def ParseCompletedJobs(self):
         self._ParseMulti('/Plotk?data=JOBOUT&x=all',
                          'Completed Jobs ')
-        for k, v in self.data.iteritems():
-            v['Total Completed Jobs'] = sum([v['Completed Jobs 1'],
-                                             v['Completed Jobs 2'],
-                                             v['Completed Jobs 3']])
 
+        for k, v in self.data.iteritems():
+            v['Total Completed Jobs'] = sum([float(v['Completed Jobs 1']),
+                                             float(v['Completed Jobs 2']),
+                                             float(v['Completed Jobs 3'])])
+                
     def ParseCash(self):
         self._ParseSingle('/Plot1?data=CASH&plottech=html5',
                           'Cash')
@@ -174,13 +183,15 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         s = Session()
         s.Login()
-        s.ParseCompletedJobs()        
+        time.sleep( 5 )
+        #s.ParseCompletedJobs()
         s.ParseRevenue()
         s.ParseInventory()
         s.ParseLeadTimes()
+        s.ParseCompletedJobs()
         s.ParseDemand()
         s.ParseQueueJobs()
-
+		
         s.ParseStationUtilization(1)
         s.ParseStationUtilization(2)
         s.ParseStationUtilization(3)
