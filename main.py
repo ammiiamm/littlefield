@@ -1,3 +1,16 @@
+#import webapp2
+#
+#
+#class MainPage(webapp2.RequestHandler):
+#    def get(self):
+#        self.response.headers['Content-Type'] = 'text/plain'
+#        self.response.write('Hello, World!')
+#
+#
+#app = webapp2.WSGIApplication([
+#    ('/', MainPage),
+#], debug=True)
+
 #!/usr/bin/env python
 #
 # Google appengine app that crawls data from the LittleField simulation
@@ -24,8 +37,8 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 class Session():
-    USER='*********'
-    PASS='*********'
+    USER='****'
+    PASS='****'
 
     def __init__(self):
         self.cookie = ''

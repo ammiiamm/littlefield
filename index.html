@@ -1,168 +1,151 @@
 <html>
+
 <head>
-  
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
+
 <body>
 
-  <div class="panel-group center">
- 
-   	<div class="col-sm-3">
-    <div class="panel panel-success">
-      <div class="panel-heading">Our Team: {{ team }}</div>
-      <div class="panel-body">
-		{% for r in standing %}
-			  {% if r[1] == team %}
-			    <h2>
-			    <b><p>Rank: {{r[0]}}</p></b>	
-			    <b><p>Cash: ${{r[2]}}</p></b>
-			    </h2>
-			  {% endif %}
-		{% endfor %}
-      </div>
-    </div>
-    </div>
+    <div class="panel-group center">
 
- 
-   	<div class="col-sm-3">
-    <div class="panel panel-success">
-      <div class="panel-heading">Avg. Revenue since day 15</div>
-      <div class="panel-body">
-		<h2>${{avg_revenue}}</h2>
-      </div>
-    </div>
-    </div>
- 
-  	<div class="col-sm-3">
-    <div class="panel panel-info">
-      <div class="panel-heading">Most recent revenue</div>
-      <div class="panel-body">
-		{% for r in data|reverse %}
-		  {% if loop.index <= 6 %}
-		    <p>Day {{r}}: ${{data[r]['Total Revenue']}}</p>
-		  {% endif %}
-		{% endfor %}      
-      </div>
-    </div>
-    </div>
-	
-	<div class="col-sm-3">
-    <div class="panel panel-primary">
-      <div class="panel-heading">Standing</div>
-      <div class="panel-body">
-      			{% for r in standing %}
-			  {% if loop.index == 1 %}
-			    <p class="danger">The 1st Team:{{r[1]}} {{r[2]}}</p>
-			  {% elif r[1] == 2 %}
-			    <p>The 2nd Team:{{r[1]}} {{r[2]}}</p>
-			  {% elif r[1] == 3 %}
-			    <p>The 3rd Team:{{r[1]}} {{r[2]}}</p>    
-			  {% elif r[1] == 'tbsb2t' %}
-			    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>
-			  {% elif r[1] == 'tbsmookrata' %}
-			    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>    
-			  {% elif r[1] == 'tbsfactoryking' %}
-			    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>    
-			  {% elif r[1] == 'tbssexyelephant' %}
-			    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>    
-			  {% elif r[1] == 'tbssleeper' %}
-			    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>    
-			  {% endif %}
-			{% endfor %}
-      </div>
-    </div>
-    </div>
-   </div>
-   
-<div>
-
-</div>
-
-<div>
-
-      <div class="panel-body">
-			<table class="table table-bordered table-hover" 
-			  <tr>
-				<th>Day</th>
-				<!--<th>Time</th>-->
-				<th>JOB</th>
-				<th>Q</th>
-				<th>ST1Q</th>
-				<th>ST1U</th>
-				<th>ST2Q</th>
-				<th>ST2U</th>
-				<th>ST3U</th>
-				<th>ST3U</th>
-				<th>JOBOUT1</th>
-				<th>JOBOUT2</th>
-				<th>JOBOUT3</th>
-				<th>LEAD1</th>
-				<th>LEAD2</th>
-				<th>LEAD3</th>
-				<th>REV1</th>
-				<th>REV2</th>
-				<th>REV3</th>
-				<th>SUMREV</th>
-				<th>ROL15d</th>
-				<th>SUMJOB</th>
-				<th>INV</th>
-				<th>CASH</th>
-			
-			  <tr>
-			{% for r in data %}
-			  <tr>
-			  {% for c in fields %}
-			    <td>{{data[r][c]}}</td>
-			  {% endfor %}
-			  </tr>
-			{% endfor %}
-			</table>
-</div></div>
+        <div class="col-sm-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">Our Team: {{ team }}</div>
+                <div class="panel-body">
+                    {% for r in standing %} {% if r[1] == team %}
+                    <h2>
+                        <b><p>Rank: {{r[0]}}</p></b>
+                        <b><p>Cash: ${{r[2]}}</p></b>
+                    </h2>
+                    {% endif %} {% endfor %}
+                </div>
+            </div>
+        </div>
 
 
-<div class="panel-group center">
-    <div class="panel panel-info">
-      <div class="panel-heading">Data Columns Description</div>
-      <div class="panel-body">
-      <table class="table table-bordered">
-      <tr>
-      <td>
-      			Day = Day in a game<br>
-			<!-- Time = Real Time<br> -->
-			JOB = Job Arrival<br>
-			Q = Queue Job<br>
-			INV = Inventory<br>
-			CASH = Left Cash
-      </td>
-	<td></td>
-	<td>
-			ST1Q = Station 1 Queue<br>
-			ST1U = Station 1 Utilization<br>
-			ST2Q = Station 2 Queue<br>
-			ST2U = Station 2 Utilization<br>
-			ST3Q = Station 2 Queue<br>
-			ST3U = Station 2 Utilization<br>
-	</td><td></td>
-	<td>
-			JOBOUT1 = Completed Jobs 1<br>
-			JOBOUT2 = Completed Jobs 2<br>
-			JOBOUT3 = Completed Jobs 3<br>
-			LEAD1 = Lead Times 1<br>
-			LEAD2 = Lead Times 2<br>
-			LEAD3 = Lead Times 3
-	</td><td></td>
-	<td>
-			REV1 = Revenue 1<br>
-			REV2 = Revenue 2<br>
-			REV3 = Revenue 3<br>
-			SUMREV = Total Revenue<br>
-			ROL15d = Rolling Revenue Avg >50d<br>
-			SUMJOB = Total Completed Jobs
+        <div class="col-sm-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">Avg. Revenue since day 15</div>
+                <div class="panel-body">
+                    <h2>${{avg_revenue}}</h2>
+                </div>
+            </div>
+        </div>
 
-	</td>
-	</td></table>
-</div></div></div>
+        <div class="col-sm-3">
+            <div class="panel panel-info">
+                <div class="panel-heading">Most recent revenue</div>
+                <div class="panel-body">
+                    {% for r in data|reverse %} {% if loop.index
+                    <=6 %} <p>Day {{r}}: ${{data[r]['Total Revenue']}}</p>
+                        {% endif %} {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Standing</div>
+                <div class="panel-body">
+                    {% for r in standing %} {% if loop.index == 1 %}
+                    <p class="danger">The 1st Team:{{r[1]}} {{r[2]}}</p>
+                    {% elif r[1] == 2 %}
+                    <p>The 2nd Team:{{r[1]}} {{r[2]}}</p>
+                    {% elif r[1] == 3 %}
+                    <p>The 3rd Team:{{r[1]}} {{r[2]}}</p>
+                    {% elif r[1] == 'tbsb2t' %}
+                    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>
+                    {% elif r[1] == 'tbsmookrata' %}
+                    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>
+                    {% elif r[1] == 'tbsfactoryking' %}
+                    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>
+                    {% elif r[1] == 'tbssexyelephant' %}
+                    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>
+                    {% elif r[1] == 'tbssleeper' %}
+                    <p>{{r[1]}} (${{r[2]}}) in Rank {{r[0]}}</p>
+                    {% endif %} {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+
+    </div>
+
+    <div>
+
+        <div class="panel-body">
+            <table class="table table-bordered table-hover" <tr>
+                <th>Day</th>
+                <!--<th>Time</th>-->
+                <th>JOB</th>
+                <th>Q</th>
+                <th>ST1Q</th>
+                <th>ST1U</th>
+                <th>ST2Q</th>
+                <th>ST2U</th>
+                <th>ST3U</th>
+                <th>ST3U</th>
+                <th>JOBOUT1</th>
+                <th>JOBOUT2</th>
+                <th>JOBOUT3</th>
+                <th>LEAD1</th>
+                <th>LEAD2</th>
+                <th>LEAD3</th>
+                <th>REV1</th>
+                <th>REV2</th>
+                <th>REV3</th>
+                <th>SUMREV</th>
+                <th>ROL15d</th>
+                <th>SUMJOB</th>
+                <th>INV</th>
+                <th>CASH</th>
+
+                <tr>
+                    {% for r in data %}
+                    <tr>
+                        {% for c in fields %}
+                        <td>{{data[r][c]}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+            </table>
+        </div>
+    </div>
+
+
+    <div class="panel-group center">
+        <div class="panel panel-info">
+            <div class="panel-heading">Data Columns Description</div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>
+                            Day = Day in a game<br>
+                            <!-- Time = Real Time<br> -->
+                            JOB = Job Arrival<br> Q = Queue Job<br> INV = Inventory<br> CASH = Left Cash
+                        </td>
+                        <td></td>
+                        <td>
+                            ST1Q = Station 1 Queue<br> ST1U = Station 1 Utilization<br> ST2Q = Station 2 Queue<br> ST2U = Station 2 Utilization<br> ST3Q = Station 2 Queue<br> ST3U = Station 2 Utilization<br>
+                        </td>
+                        <td></td>
+                        <td>
+                            JOBOUT1 = Completed Jobs 1<br> JOBOUT2 = Completed Jobs 2<br> JOBOUT3 = Completed Jobs 3<br> LEAD1 = Lead Times 1<br> LEAD2 = Lead Times 2<br> LEAD3 = Lead Times 3
+                        </td>
+                        <td></td>
+                        <td>
+                            REV1 = Revenue 1<br> REV2 = Revenue 2<br> REV3 = Revenue 3<br> SUMREV = Total Revenue<br> ROL15d = Rolling Revenue Avg >50d<br> SUMJOB = Total Completed Jobs
+
+                        </td>
+                        </td>
+                </table>
+            </div>
+        </div>
+    </div>
 
 </body>
-</html>
 
+</html>
